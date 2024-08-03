@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Email;
 use Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -27,6 +28,14 @@ class EmailService
             $mail->Body    = $body;
 
             $mail->send();
+
+            // Save data to DB
+            $email = new Email();
+            $email->save([
+                'to' => $to,
+                'subject' => $subject,
+                'body' => $body,
+            ]);
         } catch (Exception $e) {
             throw $e;
         }
