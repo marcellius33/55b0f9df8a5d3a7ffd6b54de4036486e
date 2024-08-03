@@ -31,6 +31,16 @@ services:
       - "8080:80"
     depends_on:
       - app
+  queue:
+    image: "redis:alpine"
+    container_name: email-api-queue
+    ports:
+      - "6375:6379"
+    volumes:
+      - "redisdata:/data"
+
 volumes:
   pgdata:
+    driver: local
+  redisdata:
     driver: local

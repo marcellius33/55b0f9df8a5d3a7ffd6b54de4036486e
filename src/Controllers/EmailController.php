@@ -2,22 +2,15 @@
 
 namespace App\Controllers;
 
+use App\Producer;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use App\Services\EmailService;
 use Exception;
 use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Validator as v;
 
 class EmailController
 {
-    private $emailService;
-
-    public function __construct(EmailService $emailService)
-    {
-        $this->emailService = $emailService;
-    }
-
     public function sendEmail(Request $request, Response $response): Response
     {
         $data = $request->getParsedBody();
@@ -31,7 +24,10 @@ class EmailController
 
         try {
             $validator->assert($data);
-            $this->emailService->sendEmail($data['to'], $data['subject'], $data['body']);
+
+            // Queue job
+            $producer = new Producer('send_email_queue');
+            $producer->pushEmailJob($data);
         } catch (ValidationException $exception) {
             $response->getBody()->write(json_encode([
                 'error' => 'Validation failed',
@@ -41,6 +37,7 @@ class EmailController
         } catch (Exception $exception) {
             $response->getBody()->write(json_encode([
                 'error' => 'An unexpected error occurred',
+                'message' => $exception->getMessage(),
             ]));
             return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
         }
