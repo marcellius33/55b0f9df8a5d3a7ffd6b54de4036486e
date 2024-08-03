@@ -1,13 +1,26 @@
 <?php
 
-require '../vendor/autoload.php';
+use App\Controllers\EmailController;
 
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$method = $_SERVER['REQUEST_METHOD'];
+require __DIR__ . '/../vendor/autoload.php';
 
-if ($uri === '/send-email' && $method === 'POST') {
-    // Call function from controller
-} else {
-    header("HTTP/1.1 404 Not Found");
-    echo json_encode(['message' => 'Not Found Boys']);
-}
+use Slim\Factory\AppFactory;
+use DI\Container;
+use Dotenv\Dotenv;
+
+// Load .env file
+$dotenv = Dotenv::createImmutable(dirname(__DIR__));
+$dotenv->safeLoad();
+
+$container = new Container();
+AppFactory::setContainer($container);
+$app = AppFactory::create();
+
+$app->addRoutingMiddleware();
+$app->addBodyParsingMiddleware();
+$errorMiddleware = $app->addErrorMiddleware(true, true, true);
+
+// Route List
+$app->post('/send-email', [EmailController::class, 'sendEmail']);
+
+$app->run();
