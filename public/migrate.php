@@ -13,6 +13,7 @@ $migration = new Migration();
 
 $migrationFiles = [
     'src/Migrations/2024_08_03_create_sent_emails_table.sql',
+    'src/Migrations/2024_08_04_create_access_tokens_table.sql',
 ];
 
 foreach ($migrationFiles as $file) {

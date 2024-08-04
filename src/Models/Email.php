@@ -15,7 +15,7 @@ class Email
         $this->pdo = $db->getPdo();
     }
 
-    public function save($data)
+    public function save(array $data): void
     {
         $sql = "INSERT INTO {$this->table} (\"to\", subject, body) VALUES (:to, :subject, :body)";
         $stmt = $this->pdo->prepare($sql);

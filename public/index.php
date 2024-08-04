@@ -1,6 +1,8 @@
 <?php
 
+use App\Controllers\AuthController;
 use App\Controllers\EmailController;
+use App\Middlewares\Authenticate;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -21,6 +23,7 @@ $app->addBodyParsingMiddleware();
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 
 // Route List
-$app->post('/send-email', [EmailController::class, 'sendEmail']);
+$app->post('/send-email', [EmailController::class, 'sendEmail'])->add(new Authenticate());
+$app->post('/access-token', [AuthController::class, 'getAccessToken']);
 
 $app->run();
