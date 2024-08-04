@@ -19,7 +19,7 @@ class Producer
         ]);
     }
 
-    public function pushEmailJob(array $data)
+    public function pushEmailJob(array $data): void
     {
         $message = json_encode($data);
         $this->redis->rpush($this->queueName, $message);

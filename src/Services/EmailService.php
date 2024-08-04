@@ -8,7 +8,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 class EmailService
 {
-    public function sendEmail(string $to, string $subject, string $body)
+    public function sendEmail(string $to, string $subject, string $body): void
     {
         $mail = new PHPMailer(true);
 

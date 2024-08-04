@@ -14,7 +14,7 @@ class Migration
         $this->pdo = $db->getPdo();
     }
 
-    public function run($migrationFile)
+    public function run($migrationFile): void
     {
         if (file_exists($migrationFile)) {
             $sql = file_get_contents($migrationFile);

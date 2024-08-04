@@ -22,7 +22,7 @@ class Worker
         $this->emailService = new EmailService();
     }
 
-    public function processMessages()
+    public function processMessages(): void
     {
         echo " [Worker] Waiting for messages. To exit press CTRL+C\n";
 

@@ -9,7 +9,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class AuthController
 {
-    public function getAccessToken(Request $request, Response $response)
+    public function getAccessToken(Request $request, Response $response): Response
     {
         $oauth2server = new OAuth2Server();
         $server = $oauth2server->getServer();
